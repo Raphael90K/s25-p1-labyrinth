@@ -50,8 +50,21 @@
     <Compile Include="Assets\Controllers\FirstPersonController\FirstPersonController.cs" />
     <Compile Include="Assets\Controllers\Common\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scrips\GoalTrigger.cs" />
+    <Compile Include="Assets\Scrips\NpcController.cs" />
     <Compile Include="Assets\Controllers\Common\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scrips\LabyrinthParser.cs" />
+    <Compile Include="Assets\Scrips\NpcKiClient.cs" />
+    <Compile Include="Assets\Animation\EnemyAnimatorScript.cs" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\pip-24.2.dist-info\entry_points.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\charset_normalizer-3.4.2.dist-info\top_level.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\pip-24.2.dist-info\top_level.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\pip\_vendor\vendor.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\requests-2.32.4.dist-info\top_level.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\certifi-2025.6.15.dist-info\top_level.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\pip-24.2.dist-info\AUTHORS.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\urllib3-2.5.0.dist-info\licenses\LICENSE.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\charset_normalizer-3.4.2.dist-info\entry_points.txt" />
+    <None Include="Assets\Scrips\venv\Lib\site-packages\pip-24.2.dist-info\LICENSE.txt" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Programme\Unity\Hub\Editor\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

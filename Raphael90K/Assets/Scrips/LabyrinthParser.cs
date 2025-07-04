@@ -5,7 +5,7 @@ public class LabyrinthParser : MonoBehaviour
     public Texture2D labyrinthImage; // BMP-Bild als Texture2D
     public GameObject playerPrefab; // Player Model
     public GameObject lampPrefab; // Lamp Model
-    public GameObject goalPrefab; // Goal Model
+    public GameObject enemyPrefab; // Goal Model
     public Material transparentMaterial; // Material für transparente Wände
     public Material mirrorMaterial; // Material für Spiegelwände
     public Material wallMaterial; // Material für normale Wände
@@ -68,7 +68,7 @@ public class LabyrinthParser : MonoBehaviour
     private void CreateGoal(int x, int y)
     {
         Vector3 position = new Vector3(x * tileSize, 1f, y * tileSize);
-        Instantiate(goalPrefab, position, Quaternion.identity);
+        Instantiate(enemyPrefab, position, Quaternion.identity);
     }
 
     // Wandmaterial anhand der Farbe bestimmen
