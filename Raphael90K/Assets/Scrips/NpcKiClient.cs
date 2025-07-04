@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using System;
 using System.Text.RegularExpressions;
 
 public class NpcKIClient : MonoBehaviour
 {
-    [Header("KI Server Einstellungen")] public string apiUrl = "\"http://136.199.51.131:1234/v1/chat/completions";
+    [Header("KI Server Einstellungen")]
+    public string apiUrl = "http://136.199.51.131:1234/v1/chat/completions"; // Optional: https verwenden
     public string modelName = "deepseek-coder-v2-lite-instruct";
 
     public Action<string, string, string> OnKIResponse; // action, direction, emotion
@@ -19,32 +20,27 @@ public class NpcKIClient : MonoBehaviour
 
     IEnumerator SendPrompt(string userPrompt)
     {
-        string systemPrompt = @"Du bist ein Computergegner in einem Videospiel. Du erhälts immer Anweisungen
-                und Statusinformationen. Deine Antwort soll NUR folgendes Format haben (Beispiel) action run
-                direction - east; emotion scared. Es stehen folgende Aktionen zur Verfügung: idle, walk, crouch, wink
-                Es gibt folgende Richtungen north, south, west, east; Es gibt folgende Emotionen: scared, happy, calm, angry
-                ";
-        
-        string jsonBody = 
-            $@"
-                {{
-                  ""model"": ""{modelName}"",
-                  ""messages"": [
-                    {{""role"": ""system"", ""content"": ""{EscapeJson(systemPrompt)}""}},
-                    {{""role"": ""user"", ""content"": ""{EscapeJson(userPrompt)}""}}
-                  ],
-                  ""temperature"": 0.7
-                }}";
+        string systemPrompt =
+            "Du bist ein Computergegner in einem Videospiel.\n" +
+            "Du erhälst Anweisungen und Statusinformationen.\n" +
+            "Antwortformat (nur das, nichts anderes):\n" +
+            "action: walk\n" +
+            "direction: east\n" +
+            "emotion: scared\n" +
+            "Gültige Aktionen: idle, walk, crouch, wink\n" +
+            "Gültige Richtungen: north, south, east, west\n" +
+            "Gültige Emotionen: scared, angry, happy, calm";
+
+        string jsonBody = BuildJsonRequest(systemPrompt, userPrompt);
+        Debug.Log("Gesendetes JSON:\n" + jsonBody);
+
         using UnityWebRequest request = new UnityWebRequest(apiUrl, "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer lm-studio");
-        
-        Debug.Log("Gesendetes JSON:\n" + jsonBody);
+        request.SetRequestHeader("Authorization", "Bearer lm-studio"); // Entferne diese Zeile, wenn dein Server keinen Token verlangt
 
-        
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -54,22 +50,44 @@ public class NpcKIClient : MonoBehaviour
         }
 
         string rawJson = request.downloadHandler.text;
-
         string content = TryExtractContent(rawJson);
+
         if (string.IsNullOrEmpty(content))
         {
             Debug.LogWarning("Antwort enthält kein lesbares Content-Feld.");
             yield break;
         }
 
-        // Robust analysieren
         var result = ParseFlexible(content);
         Debug.Log($"KI → action: {result.action}, direction: {result.direction}, emotion: {result.emotion}");
 
         OnKIResponse?.Invoke(result.action, result.direction, result.emotion);
     }
 
-    // Robust extrahieren aus JSON-Antwort
+    string BuildJsonRequest(string systemPrompt, string userPrompt)
+    {
+        string sys = EscapeJson(systemPrompt);
+        string usr = EscapeJson(userPrompt);
+
+        return $@"{{
+  ""model"": ""{modelName}"",
+  ""messages"": [
+    {{""role"": ""system"", ""content"": ""{sys}""}},
+    {{""role"": ""user"", ""content"": ""{usr}""}}
+  ],
+  ""temperature"": 0.7
+}}";
+    }
+
+    string EscapeJson(string text)
+    {
+        return text
+            .Replace("\\", "\\\\")
+            .Replace("\"", "\\\"")
+            .Replace("\n", "\\n")
+            .Replace("\r", ""); // Falls CR vorhanden ist
+    }
+
     string TryExtractContent(string json)
     {
         try
@@ -81,8 +99,9 @@ public class NpcKIClient : MonoBehaviour
                 return content.Replace("\\n", "\n").Replace("\\\"", "\"").Trim();
             }
         }
-        catch
+        catch (Exception e)
         {
+            Debug.LogWarning("Fehler beim Parsen der Antwort: " + e.Message);
         }
 
         return null;
@@ -99,8 +118,7 @@ public class NpcKIClient : MonoBehaviour
 
     string TryFindValue(string text, string key, string[] allowedValues)
     {
-        // Suche Zeile mit z. B. "action: crawl"
-        Match match = Regex.Match(text, $"{key}\\s*:\\s*(\\w+)", RegexOptions.IgnoreCase);
+        Match match = Regex.Match(text, $"{key}\\s*[:\\-]?\\s*(\\w+)", RegexOptions.IgnoreCase);
         if (match.Success)
         {
             string value = match.Groups[1].Value.ToLower();
@@ -111,17 +129,12 @@ public class NpcKIClient : MonoBehaviour
         }
 
         // Fallback-Werte
-        switch (key)
+        return key switch
         {
-            case "action": return "idle";
-            case "direction": return "north";
-            case "emotion": return "calm";
-            default: return "";
-        }
-    }
-
-    string EscapeJson(string text)
-    {
-        return text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n");
+            "action" => "idle",
+            "direction" => "north",
+            "emotion" => "calm",
+            _ => ""
+        };
     }
 }
