@@ -21,15 +21,19 @@ public class NpcKIClient : MonoBehaviour
     IEnumerator SendPrompt(string userPrompt)
     {
         string systemPrompt =
-            "Du bist ein Computergegner in einem Videospiel.\n" +
-            "Du erhälst Anweisungen und Statusinformationen.\n" +
-            "Antwortformat (nur das, nichts anderes):\n" +
-            "action: walk\n" +
-            "direction: east\n" +
-            "emotion: scared\n" +
-            "Gültige Aktionen: idle, walk, crouch, wink\n" +
-            "Gültige Richtungen: north, south, east, west\n" +
-            "Gültige Emotionen: scared, angry, happy, calm";
+            "You are an NPC in a video game.\n" +
+            "You receive your status and the status of the player.\n" +
+            "If the player reaches you, you lose.\n"+
+            "You are confident and be idle or wink sometimes. You can risk to get caught, when you feel safe.\n"+
+            "Your Answer looks like:\n" +
+            "action: ... " +
+            "direction: ... " +
+            "emotion: ... " +
+            "You do not reply more than this!!!!!\n" +
+            "valid actions: idle, walk, run, crouch, wink\n" +
+            "valid directions: 0 - 360\n" +
+            "valid emotions: scared, angry, happy, calm\n"+
+            "if direction and angleToPlayer are similar, you run towards the Player. ";
 
         string jsonBody = BuildJsonRequest(systemPrompt, userPrompt);
         Debug.Log("Gesendetes JSON:\n" + jsonBody);
@@ -50,6 +54,7 @@ public class NpcKIClient : MonoBehaviour
         }
 
         string rawJson = request.downloadHandler.text;
+        Debug.Log("Answer: " + rawJson);
         string content = TryExtractContent(rawJson);
 
         if (string.IsNullOrEmpty(content))
@@ -109,26 +114,69 @@ public class NpcKIClient : MonoBehaviour
 
     (string action, string direction, string emotion) ParseFlexible(string response)
     {
-        string action = TryFindValue(response, "action", new[] { "idle", "walk", "crouch", "wink" });
-        string direction = TryFindValue(response, "direction", new[] { "north", "south", "east", "west" });
+        string action = TryFindValue(response, "action", new[] { "idle", "walk", "crouch", "wink", "run" });
+        string direction = TryFindFloatBetween(response, "direction", 0f, 360f).ToString("F1"); 
         string emotion = TryFindValue(response, "emotion", new[] { "scared", "angry", "happy", "calm" });
 
         return (action, direction, emotion);
     }
-
-    string TryFindValue(string text, string key, string[] allowedValues)
+    
+    float TryFindFloatBetween(string text, string key, float min, float max)
     {
-        Match match = Regex.Match(text, $"{key}\\s*[:\\-]?\\s*(\\w+)", RegexOptions.IgnoreCase);
+        // Beispiel: "direction: 123.45" oder "direction - 278"
+        Match match = Regex.Match(text, $@"{key}\s*[:\-]?\s*([0-9]+(\.[0-9]+)?)", RegexOptions.IgnoreCase);
         if (match.Success)
         {
-            string value = match.Groups[1].Value.ToLower();
-            foreach (var valid in allowedValues)
+            if (float.TryParse(match.Groups[1].Value, out float result))
             {
-                if (value.Contains(valid)) return valid;
+                if (result >= min && result <= max)
+                    return result;
             }
         }
 
-        // Fallback-Werte
+        // Plan B: finde irgendeine gültige Zahl zwischen min und max
+        MatchCollection numbers = Regex.Matches(text, @"([0-9]+(\.[0-9]+)?)");
+        foreach (Match num in numbers)
+        {
+            if (float.TryParse(num.Value, out float value))
+            {
+                if (value >= min && value <= max)
+                    return value;
+            }
+        }
+
+        Debug.LogWarning($"Konnte keine gültige {key}-Gradzahl finden. Fallback auf 0.");
+        return 0f; // fallback
+    }
+    
+    string TryFindValue(string text, string key, string[] allowedValues)
+    {
+        // Alles klein für robusten Vergleich
+        text = text.ToLower();
+
+        foreach (string valid in allowedValues)
+        {
+            // Regex sucht nach: key gefolgt von beliebigen Zeichen, dann gültiger Wert
+            // z.B. "action: run", "action - run!", "action is run?"
+            string pattern = $@"{key}\s*[:\-]?\s*[^a-zA-Z0-9]?(?<{key}>{valid})\b";
+
+            Match match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                return match.Groups[key].Value;
+            }
+        }
+
+        // Als Plan B: nach gültigem Wert im gesamten Text suchen
+        foreach (string valid in allowedValues)
+        {
+            if (Regex.IsMatch(text, $@"\b{valid}\b", RegexOptions.IgnoreCase))
+            {
+                return valid;
+            }
+        }
+
+        // Fallback
         return key switch
         {
             "action" => "idle",
@@ -137,4 +185,5 @@ public class NpcKIClient : MonoBehaviour
             _ => ""
         };
     }
+    
 }

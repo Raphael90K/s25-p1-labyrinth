@@ -91,7 +91,8 @@ public class LabyrinthParser : MonoBehaviour
     void SpawnPlayer(int x, int y)
     {
         Vector3 position = new Vector3(x * tileSize, 1f, y * tileSize);
-        Instantiate(playerPrefab, position, Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, position, Quaternion.identity);
+        player.transform.tag = "Player";
     }
 
     // Erstelle einen Wand-Tile
