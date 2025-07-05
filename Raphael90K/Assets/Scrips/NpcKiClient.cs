@@ -124,22 +124,24 @@ public class NpcKIClient : MonoBehaviour
     
     float TryFindFloatBetween(string text, string key, float min, float max)
     {
-        // Beispiel: "direction: 123.45" oder "direction - 278"
-        Match match = Regex.Match(text, $@"{key}\s*[:\-]?\s*([0-9]+(\.[0-9]+)?)", RegexOptions.IgnoreCase);
+        // Match : "direction: 196.1", "direction - 196.1", "direction 196.1"
+        string pattern = $@"\b{key}\b\s*[:\-]?\s*([0-9]+(?:\.[0-9]+)?)";
+        Match match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
+
         if (match.Success)
         {
-            if (float.TryParse(match.Groups[1].Value, out float result))
+            if (float.TryParse(match.Groups[1].Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float result))
             {
                 if (result >= min && result <= max)
                     return result;
             }
         }
 
-        // Plan B: finde irgendeine gültige Zahl zwischen min und max
-        MatchCollection numbers = Regex.Matches(text, @"([0-9]+(\.[0-9]+)?)");
+        // Plan B: finde irgendeine gültige Zahl im erlaubten Bereich
+        MatchCollection numbers = Regex.Matches(text, @"([0-9]+(?:\.[0-9]+)?)");
         foreach (Match num in numbers)
         {
-            if (float.TryParse(num.Value, out float value))
+            if (float.TryParse(num.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float value))
             {
                 if (value >= min && value <= max)
                     return value;
@@ -147,8 +149,9 @@ public class NpcKIClient : MonoBehaviour
         }
 
         Debug.LogWarning($"Konnte keine gültige {key}-Gradzahl finden. Fallback auf 0.");
-        return 0f; // fallback
+        return 0f;
     }
+
     
     string TryFindValue(string text, string key, string[] allowedValues)
     {
