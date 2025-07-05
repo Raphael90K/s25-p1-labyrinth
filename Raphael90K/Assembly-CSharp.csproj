@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Assets\Controllers\ThirdPersonController\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Controllers\FirstPersonController\FirstPersonController.cs" />
+    <Compile Include="Assets\Scrips\FaceTextureSwitcher.cs" />
     <Compile Include="Assets\Controllers\Common\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scrips\GoalTrigger.cs" />
     <Compile Include="Assets\Scrips\NpcController.cs" />

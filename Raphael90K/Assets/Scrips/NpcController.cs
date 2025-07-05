@@ -24,9 +24,13 @@ public class NpcController : MonoBehaviour
     private float angleToPlayer = 0f;
 
     private Rigidbody rb;
+    
+    private FaceTextureSwitcher faceTextureSwitcher;
 
     void Start()
     {
+        faceTextureSwitcher = GetComponent<FaceTextureSwitcher>();
+
         animatorScript = GetComponent<EnemyAnimatorScript>();
         enemyRenderer = GetComponentInChildren<Renderer>();
 
@@ -163,7 +167,7 @@ public class NpcController : MonoBehaviour
                 break;
             case "run":
                 animatorScript.walk();
-                this.movementSpeed = this.baseSpeed * 10f;
+                this.movementSpeed = this.baseSpeed * 3f;
                 currentAction = "run";
                 break;
             default:
@@ -183,7 +187,11 @@ public class NpcController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = targetRotation;
         }
-
+        // Emotionale Textur setzen
+        if (faceTextureSwitcher != null)
+        {
+            faceTextureSwitcher.SetEmotion(emotion);
+        }
         // Farbe nach Emotion ändern
         if (enemyRenderer != null)
         {

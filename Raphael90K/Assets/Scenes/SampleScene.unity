@@ -266,52 +266,6 @@ MonoScript:
   m_ClassName: SceneObjectIDMapSceneAsset
   m_Namespace: UnityEngine.Rendering.HighDefinition
   m_AssemblyName: Unity.RenderPipelines.HighDefinition.Runtime
---- !u!1 &671834028
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 671834030}
-  - component: {fileID: 671834029}
-  m_Layer: 0
-  m_Name: KiClient
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &671834029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 671834028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d56d9857c54ba5928a72e88eb925b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  apiUrl: http://136.199.51.131:1234/v1/chat/completions
-  modelName: deepseek-coder-v2-lite-instruct
---- !u!4 &671834030
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 671834028}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.07038, y: 0, z: -0.18513}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901203254
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +298,7 @@ MonoBehaviour:
   labyrinthImage: {fileID: 2800000, guid: dc9c1fcd78eca2a46aee498e67864544, type: 3}
   playerPrefab: {fileID: 6448865333537101685, guid: 07c13303c9b59814294970bd51f74193, type: 3}
   lampPrefab: {fileID: 1325428948306479927, guid: 1d0ae3d3329173d46a505ac62ea38a0f, type: 3}
-  enemyPrefab: {fileID: 600860827078211587, guid: a666c8f0bbada404baa89d12970ddb63, type: 3}
+  enemyPrefab: {fileID: 3719312237589365848, guid: aa5ef862a2564cf4e9de26defd75015c, type: 3}
   transparentMaterial: {fileID: 2100000, guid: 8efd2fe611deb6e4a9e8ba90ee3a80f4, type: 2}
   mirrorMaterial: {fileID: 2100000, guid: f5005c2f962c6454fa0409f719f8b97f, type: 2}
   wallMaterial: {fileID: 2100000, guid: 420763c0904472d44a0b6e5e37913e85, type: 2}
@@ -926,4 +880,3 @@ SceneRoots:
   - {fileID: 1046469887}
   - {fileID: 287864317}
   - {fileID: 901203256}
-  - {fileID: 671834030}
