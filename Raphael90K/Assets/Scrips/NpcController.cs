@@ -154,6 +154,7 @@ public class NpcController : MonoBehaviour
         {
             case "walk":
                 animatorScript.walk();
+                this.movementSpeed = this.baseSpeed * 1f;
                 currentAction = "walk";
                 break;
             case "crouch":
@@ -162,7 +163,6 @@ public class NpcController : MonoBehaviour
                 break;
             case "wink":
                 animatorScript.wink();
-                this.movementSpeed = this.baseSpeed * 1f;
                 currentAction = "wink";
                 break;
             case "run":
