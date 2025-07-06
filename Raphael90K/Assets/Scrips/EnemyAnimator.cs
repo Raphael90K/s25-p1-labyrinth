@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyAnimatorScript : MonoBehaviour
+public class EnemyAnimator : MonoBehaviour
 {
     Animator animator;
     private float timer = 0f;

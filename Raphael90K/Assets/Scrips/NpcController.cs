@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(EnemyAnimatorScript))]
+[RequireComponent(typeof(EnemyAnimator))]
 public class NpcController : MonoBehaviour
 {
     public NpcKIClient kiClient;
-    private EnemyAnimatorScript animatorScript;
+    private EnemyAnimator _animator;
     private Renderer enemyRenderer;
 
     public float baseSpeed = 1f;
@@ -31,7 +31,7 @@ public class NpcController : MonoBehaviour
     {
         faceTextureSwitcher = GetComponent<FaceTextureSwitcher>();
 
-        animatorScript = GetComponent<EnemyAnimatorScript>();
+        _animator = GetComponent<EnemyAnimator>();
         enemyRenderer = GetComponentInChildren<Renderer>();
 
         if (kiClient == null)
@@ -153,25 +153,25 @@ public class NpcController : MonoBehaviour
         switch (action)
         {
             case "walk":
-                animatorScript.walk();
+                _animator.walk();
                 this.movementSpeed = this.baseSpeed * 1f;
                 currentAction = "walk";
                 break;
             case "crouch":
-                animatorScript.crouch();
+                _animator.crouch();
                 currentAction = "crouch";
                 break;
             case "wave":
-                animatorScript.wave();
+                _animator.wave();
                 currentAction = "wave";
                 break;
             case "run":
-                animatorScript.walk();
+                _animator.walk();
                 this.movementSpeed = this.baseSpeed * 3f;
                 currentAction = "run";
                 break;
             default:
-                animatorScript.idle();
+                _animator.idle();
                 currentAction = "idle";
                 break;
         }

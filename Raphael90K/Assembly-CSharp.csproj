@@ -51,10 +51,10 @@
     <Compile Include="Assets\Scrips\FaceTextureSwitcher.cs" />
     <Compile Include="Assets\Controllers\Common\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scrips\GoalTrigger.cs" />
-    <Compile Include="Assets\Scrips\EnemyAnimatorScript.cs" />
     <Compile Include="Assets\Scrips\NpcController.cs" />
     <Compile Include="Assets\Controllers\Common\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scrips\LabyrinthParser.cs" />
+    <Compile Include="Assets\Scrips\EnemyAnimator.cs" />
     <Compile Include="Assets\Scrips\NpcKiClient.cs" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Programme\Unity\Hub\Editor\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
