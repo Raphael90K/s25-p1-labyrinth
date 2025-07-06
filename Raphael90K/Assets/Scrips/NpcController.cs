@@ -199,18 +199,6 @@ public class NpcController : MonoBehaviour
         }
     }
 
-    Vector3 DirectionToVector(string dir)
-    {
-        switch (dir.ToLower())
-        {
-            case "north": return Vector3.forward;
-            case "south": return Vector3.back;
-            case "east": return Vector3.right;
-            case "west": return Vector3.left;
-            default: return Vector3.zero;
-        }
-    }
-
     Color EmotionToColor(string emotion)
     {
         switch (emotion.ToLower())
