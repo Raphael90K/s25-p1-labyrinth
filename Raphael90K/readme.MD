@@ -1,3 +1,7 @@
-﻿# Übung 1 Spieleprogrammierung SoSe25
+﻿# Spieleprogrammierung SoSe25
 
+## Übung 1
+Raytracing in einem dynamischen Labyrinth
 ![Reflexionen im Labyrinth](Mirrors.png)
+
+## Übung 2 LLM gesteuerter NPC
