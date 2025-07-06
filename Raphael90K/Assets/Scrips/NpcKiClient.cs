@@ -24,14 +24,14 @@ public class NpcKIClient : MonoBehaviour
             "You are an NPC in a video game.\n" +
             "You receive your status and the status of the player.\n" +
             "If the player reaches you, you lose.\n"+
-            "Do Some wink and idle, even if the player is in sight.\n"+
+            "Do Some wave and idle, even if the player is in sight.\n"+
             "You are gentle, but if the player approaches, you can get scared or angry.\n" +
             "Your Answer looks like:\n" +
             "action: ... " +
             "direction: ... " +
             "emotion: ... " +
             "You do not reply more than this!!!!!\n" +
-            "valid actions: idle, walk, crouch, wink, run\n" +
+            "valid actions: idle, walk, crouch, wave, run\n" +
             "valid directions: 0 - 360\n" +
             "valid emotions: scared, angry, happy, calm\n"+
             "if direction and angleToPlayer are similar, you run towards the Player. ";
@@ -115,7 +115,7 @@ public class NpcKIClient : MonoBehaviour
 
     (string action, string direction, string emotion) ParseFlexible(string response)
     {
-        string action = TryFindValue(response, "action", new[] { "idle", "walk", "crouch", "wink", "run" });
+        string action = TryFindValue(response, "action", new[] { "idle", "walk", "crouch", "wave", "run" });
         string direction = TryFindFloatBetween(response, "direction", 0f, 360f).ToString("F1"); 
         string emotion = TryFindValue(response, "emotion", new[] { "scared", "angry", "happy", "calm" });
 

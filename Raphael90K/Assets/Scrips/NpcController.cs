@@ -161,9 +161,9 @@ public class NpcController : MonoBehaviour
                 animatorScript.crouch();
                 currentAction = "crouch";
                 break;
-            case "wink":
-                animatorScript.wink();
-                currentAction = "wink";
+            case "wave":
+                animatorScript.wave();
+                currentAction = "wave";
                 break;
             case "run":
                 animatorScript.walk();
